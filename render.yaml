@@ -1,0 +1,22 @@
+# [Añadido, preparación de despliegue] Blueprint de Render: al conectar este repositorio
+# en Render ("New > Blueprint"), esto configura el servicio del backend automáticamente.
+# No incluye una base de datos de Render a propósito — el equipo eligió Supabase para
+# PostgreSQL; DATABASE_URL se completa a mano con la cadena de conexión de Supabase.
+
+services:
+  - type: web
+    name: matrixflow-backend
+    env: docker
+    plan: free
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /api/health
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false
+      - key: JWT_EXPIRE_MINUTES
+        value: "480"

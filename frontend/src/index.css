@@ -1,0 +1,15 @@
+@import 'tailwindcss';
+
+/* Paleta de PDF §8.4 (identidad visual) */
+@theme {
+  --color-canvas: #f8fafc;
+  --color-sidebar: #0f172a;
+  --color-primary: #2563eb;
+  --color-accent: #06b6d4;
+  --color-ink: #0f172a;
+  --color-muted: #64748b;
+}
+
+body {
+  @apply bg-canvas text-ink antialiased;
+}

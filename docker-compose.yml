@@ -1,0 +1,52 @@
+# [Añadido en el repaso de fidelidad §16-21, PDF §17]. Levanta los tres servicios con un
+# solo comando (`docker compose up --build`) para desarrollo o demo local — no implica
+# ningún despliegue a la nube (eso sigue siendo una decisión aparte, no tomada todavía).
+#
+# Requisito real antes de construir la imagen del backend: los pesos ONNX deben existir en
+# backend/models/ (están ignorados por git a propósito, D45) — descárgalos primero.
+
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-matrixflow}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-matrixflow_dev}
+      POSTGRES_DB: ${POSTGRES_DB:-matrixflow}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-matrixflow}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SECRET_KEY: ${SECRET_KEY:-matrixflow-dev-secret-cambiar-en-produccion}
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-matrixflow}:${POSTGRES_PASSWORD:-matrixflow_dev}@db:5432/${POSTGRES_DB:-matrixflow}
+      CORS_ORIGINS: '["http://localhost:5173"]'
+      JWT_EXPIRE_MINUTES: ${JWT_EXPIRE_MINUTES:-480}
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:8000}
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "5173:80"
+
+volumes:
+  db_data:

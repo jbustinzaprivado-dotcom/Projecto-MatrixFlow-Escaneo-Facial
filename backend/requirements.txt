@@ -1,0 +1,24 @@
+# Dependencias por fase [PDF §9, §10, §11]: no se instala lo que la fase actual no usa.
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.4
+pydantic-settings==2.7.1
+
+# Fase 3 — PostgreSQL y modelo de datos [PDF §10]
+SQLAlchemy==2.0.36
+alembic==1.14.0
+psycopg2-binary==2.9.10
+
+# Fase 4 — Motor matemático [PDF §11]
+numpy==2.1.3
+
+# Fase A — Login biométrico [Añadido, fuera del documento]
+opencv-python-headless==4.11.0.86
+python-multipart==0.0.20
+
+# Fase 6 — Seguridad [PDF §13]: JWT emitido por la propia verificación facial (D70)
+PyJWT==2.10.1
+
+# Fase 8 — Pruebas [PDF §15]
+pytest==8.3.4
+httpx==0.28.1
