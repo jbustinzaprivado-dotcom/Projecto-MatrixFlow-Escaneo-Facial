@@ -107,7 +107,12 @@ export default function Layout() {
   const [open, setOpen] = useState(false)
 
   return (
-    <div className="flex min-h-screen">
+    // [Añadido, feedback del equipo] Antes era `min-h-screen` con scroll de toda la página:
+    // el `<aside>` mide exactamente 100vh, así que al bajar en una tabla larga (Inventario)
+    // el fondo del sidebar se acababa a mitad de pantalla. Ahora el layout mide 100vh fijo y
+    // solo `<main>` scrollea verticalmente — el sidebar siempre llena la pantalla, y nunca se
+    // agrega scroll horizontal.
+    <div className="flex h-screen overflow-hidden">
       <a
         href="#contenido"
         className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:m-2 focus:rounded focus:bg-primary focus:px-3 focus:py-2 focus:text-white"
@@ -115,7 +120,7 @@ export default function Layout() {
         Saltar al contenido
       </a>
 
-      <aside className="hidden h-screen w-64 shrink-0 bg-sidebar md:block">
+      <aside className="hidden h-screen w-64 shrink-0 overflow-y-auto bg-sidebar md:block">
         <SidebarContent />
       </aside>
 
@@ -141,7 +146,7 @@ export default function Layout() {
         </div>
       )}
 
-      <div className="flex min-w-0 flex-1 flex-col">
+      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         <header className="flex items-center gap-3 border-b border-slate-200 bg-white px-4 py-3 md:hidden">
           <button
             type="button"
@@ -154,7 +159,7 @@ export default function Layout() {
           <span className="font-semibold">MatrixFlow</span>
         </header>
 
-        <main id="contenido" className="flex-1 p-4 md:p-8">
+        <main id="contenido" className="flex-1 overflow-y-auto p-4 md:p-8">
           <Outlet />
         </main>
       </div>

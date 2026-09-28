@@ -29,7 +29,7 @@ export default function Vectores() {
                     <XAxis dataKey="componente" fontSize={12} />
                     <YAxis fontSize={12} />
                     <Tooltip />
-                    <Bar dataKey="valor" fill="#2563eb" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="valor" fill="#7c3aed" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
                 <div className="mt-2 font-mono text-xs text-muted">

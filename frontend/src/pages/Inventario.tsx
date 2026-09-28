@@ -59,7 +59,7 @@ export default function Inventario() {
                 <XAxis dataKey="producto" fontSize={12} />
                 <YAxis fontSize={12} />
                 <Tooltip />
-                <Bar dataKey="total" fill="#06b6d4" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="total" fill="#f59e0b" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
