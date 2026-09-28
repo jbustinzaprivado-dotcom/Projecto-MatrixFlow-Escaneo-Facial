@@ -1,0 +1,47 @@
+import { QRCodeSVG } from 'qrcode.react'
+import type { Rol } from '../types/domain'
+
+const ROL_LABEL: Record<Rol, string> = {
+  administrador: 'Administrador',
+  analista: 'Analista',
+  consulta: 'Consulta',
+}
+
+export interface CarnetCardProps {
+  nombre: string
+  dni: string
+  rol: Rol
+  sede: string
+  activo: boolean
+  creadoEn: string
+}
+
+// [Añadido D8] Carnet solo con datos + código QR del DNI. Nunca lleva foto: el sistema no
+// guarda ninguna imagen de las personas. Extraído de Carnet.tsx para reutilizarse también en
+// el resultado del login biométrico (Ingresar.tsx) — mismo diseño, sin duplicar el JSX.
+export default function CarnetCard({ nombre, dni, rol, sede, activo, creadoEn }: CarnetCardProps) {
+  return (
+    <div className="mx-auto max-w-sm overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+      <div className="bg-sidebar px-5 py-3 text-sm font-semibold text-white">MatrixFlow Enterprise</div>
+      <div className="flex items-center gap-4 p-5">
+        <QRCodeSVG value={dni} size={96} />
+        <div>
+          <div className="text-lg font-semibold text-ink">{nombre}</div>
+          <div className="text-sm text-muted">DNI {dni}</div>
+          <div className="mt-1 text-sm text-muted">{ROL_LABEL[rol]}</div>
+          <div className="text-sm text-muted">Sede: {sede}</div>
+          <div className="text-xs text-muted">
+            Registrado el {new Date(creadoEn).toLocaleString('es-PE')}
+          </div>
+          <span
+            className={`mt-2 inline-block rounded-full px-2 py-0.5 text-xs font-medium ${
+              activo ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-muted'
+            }`}
+          >
+            {activo ? 'Activo' : 'Inactivo'}
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+}

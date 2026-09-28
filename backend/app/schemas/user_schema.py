@@ -62,6 +62,8 @@ class VerificacionUsuario(BaseModel):
     nombre: str
     dni: str
     rol: Rol
+    sede: str
+    activo: bool
     creado_en: datetime
 
 

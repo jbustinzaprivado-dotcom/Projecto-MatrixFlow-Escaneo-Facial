@@ -116,7 +116,7 @@ export interface AuditoriaEntry {
  * Desde la Fase 6, `token` trae la sesión real cuando coincide (corrige D44). */
 export interface VerificacionResultado {
   coincide: boolean
-  usuario?: Pick<Usuario, 'nombre' | 'dni' | 'rol'>
+  usuario?: Pick<Usuario, 'nombre' | 'dni' | 'rol' | 'activo'> & { sede: string; creadoEn: string }
   similitud?: number
   token?: string
 }

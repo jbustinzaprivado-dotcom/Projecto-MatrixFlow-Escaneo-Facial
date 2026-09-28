@@ -127,7 +127,12 @@ def verificar(db: Session, dni: str, imagen_bytes: bytes) -> VerificacionOut:
         coincide=True,
         similitud=mejor,
         usuario=VerificacionUsuario(
-            nombre=usuario.nombre, dni=usuario.dni, rol=usuario.rol.nombre, creado_en=usuario.creado_en
+            nombre=usuario.nombre,
+            dni=usuario.dni,
+            rol=usuario.rol.nombre,
+            sede=usuario.sucursal.nombre if usuario.sucursal else "—",
+            activo=usuario.activo,
+            creado_en=usuario.creado_en,
         ),
         token=crear_token(usuario.id, usuario.rol.nombre),
     )

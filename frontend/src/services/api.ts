@@ -111,7 +111,14 @@ export async function registrarRostro(usuarioId: number, imagen: Blob) {
 interface VerificacionApi {
   coincide: boolean
   similitud: number
-  usuario?: { nombre: string; dni: string; rol: Rol; creado_en: string } | null
+  usuario?: {
+    nombre: string
+    dni: string
+    rol: Rol
+    sede: string
+    activo: boolean
+    creado_en: string
+  } | null
   token?: string | null
 }
 
@@ -126,7 +133,14 @@ export async function verificarPorDni(dni: string, imagen: Blob): Promise<Verifi
     coincide: data.coincide,
     similitud: data.similitud,
     usuario: data.usuario
-      ? { nombre: data.usuario.nombre, dni: data.usuario.dni, rol: data.usuario.rol }
+      ? {
+          nombre: data.usuario.nombre,
+          dni: data.usuario.dni,
+          rol: data.usuario.rol,
+          sede: data.usuario.sede,
+          activo: data.usuario.activo,
+          creadoEn: data.usuario.creado_en,
+        }
       : undefined,
     token: data.token ?? undefined,
   }
