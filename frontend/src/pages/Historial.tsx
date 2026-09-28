@@ -19,6 +19,54 @@ const ETIQUETAS: Record<OperacionHistorial['tipo'], string> = {
   combinacion_lineal: 'Combinación lineal',
 }
 
+const celdaColor = (v: number) =>
+  v < 0 ? 'bg-red-50 text-red-700' : v > 0 ? 'bg-emerald-50 text-emerald-700' : 'text-ink'
+
+// [Añadido] `resultado` llega como el `str()` de una lista/matriz de Python — que es JSON
+// válido (mismos corchetes, mismos números) — así que se puede parsear y mostrar como tabla
+// o chips en vez de un bloque de texto plano, resaltando negativos/positivos (útil sobre todo
+// para la resta Ventas − Metas, el ejemplo central de [PDF §5]).
+function ResultadoCelda({ valor }: { valor: string }) {
+  let parseado: unknown
+  try {
+    parseado = JSON.parse(valor)
+  } catch {
+    return <span>{valor}</span>
+  }
+
+  if (Array.isArray(parseado) && Array.isArray(parseado[0])) {
+    return (
+      <table className="border-collapse font-mono text-xs">
+        <tbody>
+          {(parseado as number[][]).map((fila, i) => (
+            <tr key={i}>
+              {fila.map((v, j) => (
+                <td key={j} className={`border border-slate-200 px-2 py-0.5 text-center ${celdaColor(v)}`}>
+                  {v}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    )
+  }
+
+  if (Array.isArray(parseado)) {
+    return (
+      <div className="flex flex-wrap gap-1 font-mono text-xs">
+        {(parseado as number[]).map((v, i) => (
+          <span key={i} className={`rounded px-1.5 py-0.5 ${celdaColor(v)}`}>
+            {v}
+          </span>
+        ))}
+      </div>
+    )
+  }
+
+  return <span>{valor}</span>
+}
+
 function Tabla({ rows }: { rows: OperacionHistorial[] }) {
   return (
     <DataTable
@@ -28,7 +76,7 @@ function Tabla({ rows }: { rows: OperacionHistorial[] }) {
         { header: 'Fecha', cell: (row) => new Date(row.fecha).toLocaleString('es-PE') },
         { header: 'Operación', cell: (row) => ETIQUETAS[row.tipo] },
         { header: 'Entradas', cell: (row) => row.entradas },
-        { header: 'Resultado', cell: (row) => row.resultado },
+        { header: 'Resultado', cell: (row) => <ResultadoCelda valor={row.resultado} /> },
         { header: 'Usuario', cell: (row) => row.usuario },
         {
           header: 'Estado',
