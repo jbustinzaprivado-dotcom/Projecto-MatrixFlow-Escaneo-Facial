@@ -330,6 +330,8 @@ interface DashboardResumenApi {
   total_ventas: number
   total_unidades: number
   operaciones_ejecutadas: number
+  tendencia_semanal: { semana: string; total: number }[]
+  ventas_por_sede: { sede: string; total: number }[]
 }
 
 export async function getDashboardResumen() {
@@ -340,6 +342,8 @@ export async function getDashboardResumen() {
     totalVentas: data.total_ventas,
     totalUnidades: data.total_unidades,
     operacionesEjecutadas: data.operaciones_ejecutadas,
+    tendenciaSemanal: data.tendencia_semanal,
+    ventasPorSede: data.ventas_por_sede,
   }
 }
 
