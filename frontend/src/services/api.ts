@@ -112,6 +112,7 @@ interface VerificacionApi {
   coincide: boolean
   similitud: number
   usuario?: { nombre: string; dni: string; rol: Rol; creado_en: string } | null
+  token?: string | null
 }
 
 /** [Añadido D6] Verificación 1:1 real contra el motor facial (SFace). Envía el DNI y la
@@ -127,6 +128,7 @@ export async function verificarPorDni(dni: string, imagen: Blob): Promise<Verifi
     usuario: data.usuario
       ? { nombre: data.usuario.nombre, dni: data.usuario.dni, rol: data.usuario.rol }
       : undefined,
+    token: data.token ?? undefined,
   }
 }
 
