@@ -49,7 +49,7 @@ def seed() -> None:
             return
 
         empresa = Empresa(
-            razon_social="MatrixFlow Enterprise S.A.C.",
+            razon_social="MatrixFlow S.A.C.",
             ruc="20601234567",
             rubro="Comercialización de equipos de cómputo",
         )

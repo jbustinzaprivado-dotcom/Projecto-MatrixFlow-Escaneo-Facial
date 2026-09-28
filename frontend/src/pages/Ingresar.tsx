@@ -89,7 +89,7 @@ export default function Ingresar() {
       </Link>
 
       <div className="mb-8 text-center">
-        <div className="text-xl font-semibold text-ink">MatrixFlow Enterprise</div>
+        <div className="text-xl font-semibold text-ink">MatrixFlow</div>
         <div className="text-sm text-muted">Ingreso por DNI + verificación facial</div>
       </div>
 

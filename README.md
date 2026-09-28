@@ -1,4 +1,4 @@
-# MatrixFlow Enterprise
+# MatrixFlow
 
 Sistema web empresarial de análisis de ventas, inventario e indicadores mediante álgebra
 lineal — desarrollado siguiendo `MatrixFlow_Enterprise_Plan_Desarrollo.pdf` (Plan Maestro
@@ -46,21 +46,26 @@ Frontend en `http://localhost:5173`, backend en `http://localhost:8000` (`/docs`
 ### Motor facial (login por DNI + rostro)
 
 El login (`/ingresar`) necesita dos modelos de OpenCV que **no están en el repositorio**
-(pesan ~39 MB, ignorados por git a propósito). Descárgalos a `backend/models/`:
+(pesan ~39 MB, ignorados por git a propósito). Para desarrollo local sin Docker,
+descárgalos a `backend/models/`:
 
 - `face_detection_yunet_2023mar.onnx`
 - `face_recognition_sface_2021dec.onnx`
 
-Sin ellos, `POST /verificacion` y el registro de rostro responden `503`; el resto del
-sistema funciona igual.
+Ambos vienen de [opencv/opencv_zoo](https://github.com/opencv/opencv_zoo) (usa
+`media.githubusercontent.com`, no `raw.githubusercontent.com` — ese repo los versiona con
+Git LFS y `raw` solo da el puntero de texto). Sin ellos, `POST /verificacion` y el registro
+de rostro responden `503`; el resto del sistema funciona igual.
 
 ## Con Docker
 
 ```bash
 cp .env.example .env
-# descarga primero los pesos ONNX a backend/models/ (ver arriba) — la imagen los necesita
 docker compose up --build
 ```
+
+El `Dockerfile` del backend descarga los pesos ONNX automáticamente durante el build si no
+los encuentra ya en `backend/models/` — no hace falta el paso manual de arriba.
 
 ## Despliegue público (en preparación)
 

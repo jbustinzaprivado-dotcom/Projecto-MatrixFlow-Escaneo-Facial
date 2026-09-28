@@ -22,7 +22,7 @@ export interface CarnetCardProps {
 export default function CarnetCard({ nombre, dni, rol, sede, activo, creadoEn }: CarnetCardProps) {
   return (
     <div className="mx-auto max-w-sm overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-      <div className="bg-sidebar px-5 py-3 text-sm font-semibold text-white">MatrixFlow Enterprise</div>
+      <div className="bg-sidebar px-5 py-3 text-sm font-semibold text-white">MatrixFlow</div>
       <div className="flex items-center gap-4 p-5">
         <QRCodeSVG value={dni} size={96} />
         <div>

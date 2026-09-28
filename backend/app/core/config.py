@@ -8,7 +8,7 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
-    app_name: str = "MatrixFlow Enterprise API"
+    app_name: str = "MatrixFlow API"
     cors_origins: list[str] = ["http://localhost:5173"]
     database_url: str = "postgresql+psycopg2://matrixflow:matrixflow_dev@localhost:5432/matrixflow"
 

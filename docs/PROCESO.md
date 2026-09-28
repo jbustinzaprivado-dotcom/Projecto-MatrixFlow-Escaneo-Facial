@@ -1,4 +1,4 @@
-# MatrixFlow Enterprise: proceso e informes por fase
+# MatrixFlow: proceso e informes por fase
 
 - **Última actualización:** 2026-09-27
 - **Estado general:** Documento completo — **las 8 fases, el repaso de fidelidad §16-21 y los cinco agregados de D5 (incluida la Fase B, landing page) están cerrados.** Pendiente: como nuevo objetivo explícito del equipo (no del documento), un despliegue público real, en preparación.
@@ -226,7 +226,7 @@ Quedó construido: sesión real emitida por el propio login biométrico (D70, co
 
 ### Cierre de la Fase 7
 
-Quedó construido: `GET /dashboard` real (SQL, mismo patrón que `/reports`), `Dashboard.tsx` sin cambios de interfaz — solo cambió de dónde vienen los números (corrige D62) — y el retiro completo de `services/mockData.ts`, que ya no tenía ningún consumidor. Con esto, **MatrixFlow Enterprise ya no tiene ninguna pantalla con datos simulados**: las 8 fases del documento (`[PDF §7]`) están completas hasta la Fase 7 inclusive.
+Quedó construido: `GET /dashboard` real (SQL, mismo patrón que `/reports`), `Dashboard.tsx` sin cambios de interfaz — solo cambió de dónde vienen los números (corrige D62) — y el retiro completo de `services/mockData.ts`, que ya no tenía ningún consumidor. Con esto, **MatrixFlow ya no tiene ninguna pantalla con datos simulados**: las 8 fases del documento (`[PDF §7]`) están completas hasta la Fase 7 inclusive.
 
 ## 15. Fase 8 — Pruebas [PDF §15]
 
@@ -263,7 +263,7 @@ Quedó construido: `backend/tests/` con 8 archivos (43 pruebas), infraestructura
 
 ### Cierre del repaso
 
-Quedó corregido: dos vacíos funcionales reales (RF-06, RF-07) que existían desde la Fase 3 sin que ninguna Fase numerada los reclamara, una discrepancia de permisos entre lo construido (D71) y lo que pide el documento (D95), y los tres archivos de estructura de `[PDF §17]`. Con esto, MatrixFlow Enterprise queda fiel no solo a las 8 Fases numeradas, sino al documento completo (§1 a §23) hasta donde este repaso pudo verificarlo.
+Quedó corregido: dos vacíos funcionales reales (RF-06, RF-07) que existían desde la Fase 3 sin que ninguna Fase numerada los reclamara, una discrepancia de permisos entre lo construido (D71) y lo que pide el documento (D95), y los tres archivos de estructura de `[PDF §17]`. Con esto, MatrixFlow queda fiel no solo a las 8 Fases numeradas, sino al documento completo (§1 a §23) hasta donde este repaso pudo verificarlo.
 
 ## 17. Preparación de despliegue público [Añadido, fuera del documento]
 
@@ -351,7 +351,7 @@ El equipo corrió, desde su propia máquina, `python -m app.scripts.seed` y `pyt
 
 ### Cierre
 
-Los cinco módulos que se veían vacíos (Dashboard, Vectores, Matrices, Inventario, Historial) ya muestran gráficos reales con datos reales, `/ingresar` es una sola pantalla coherente con el carnet inline, y el bug de layout del sidebar quedó corregido. Con esto, MatrixFlow Enterprise queda completo: las 8 Fases del documento, el repaso de fidelidad §16-21, los cinco agregados de D5, el despliegue público, y este enriquecimiento visual final.
+Los cinco módulos que se veían vacíos (Dashboard, Vectores, Matrices, Inventario, Historial) ya muestran gráficos reales con datos reales, `/ingresar` es una sola pantalla coherente con el carnet inline, y el bug de layout del sidebar quedó corregido. Con esto, MatrixFlow queda completo: las 8 Fases del documento, el repaso de fidelidad §16-21, los cinco agregados de D5, el despliegue público, y este enriquecimiento visual final.
 
 ### Pendiente
 

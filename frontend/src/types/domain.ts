@@ -1,4 +1,4 @@
-// Tipos de dominio de MatrixFlow Enterprise [PDF §5, §10, §11]
+// Tipos de dominio de MatrixFlow [PDF §5, §10, §11]
 
 export type Rol = 'administrador' | 'analista' | 'consulta'
 

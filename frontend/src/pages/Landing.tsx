@@ -45,7 +45,7 @@ export default function Landing() {
       </header>
 
       <section className="mx-auto max-w-6xl px-6 py-20 text-center">
-        <h1 className="text-4xl font-bold text-ink sm:text-5xl">MatrixFlow Enterprise</h1>
+        <h1 className="text-4xl font-bold text-ink sm:text-5xl">MatrixFlow</h1>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-muted">
           Sistema web empresarial de análisis de ventas, inventario e indicadores — donde el
           álgebra lineal no es un módulo aparte, sino el mecanismo que convierte los datos de
@@ -100,7 +100,7 @@ export default function Landing() {
       </section>
 
       <footer className="border-t border-slate-200 py-6 text-center text-sm text-muted">
-        MatrixFlow Enterprise
+        MatrixFlow
       </footer>
     </div>
   )
