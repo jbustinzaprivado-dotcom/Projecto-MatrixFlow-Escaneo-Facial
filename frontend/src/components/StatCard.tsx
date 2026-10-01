@@ -1,14 +1,27 @@
+import { clsx } from 'clsx'
 import type { LucideIcon } from 'lucide-react'
+import { twMerge } from 'tailwind-merge'
+import { ACCENT_BORDER, type AccentColor } from './AccentCard'
 
 interface Props {
   label: string
   value: string
   icon: LucideIcon
+  accent?: AccentColor
 }
 
-export default function StatCard({ label, value, icon: Icon }: Props) {
+// [Añadido] `accent` es opcional: sin él, se ve exactamente igual que antes.
+export default function StatCard({ label, value, icon: Icon, accent }: Props) {
   return (
-    <div className="flex items-center gap-4 rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+    <div
+      className={twMerge(
+        clsx(
+          'flex items-center gap-4 rounded-lg border border-slate-200 bg-white p-6 shadow-sm',
+          accent && 'border-l-4',
+          accent && ACCENT_BORDER[accent],
+        ),
+      )}
+    >
       <div className="rounded-md bg-primary/10 p-2 text-primary">
         <Icon size={20} />
       </div>

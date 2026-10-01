@@ -11,6 +11,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
+import AccentCard from '../../components/AccentCard'
 import PageHeader from '../../components/PageHeader'
 import QueryState from '../../components/QueryState'
 import StatCard from '../../components/StatCard'
@@ -32,23 +33,39 @@ export default function Dashboard() {
       />
       <QueryState isLoading={isLoading} isError={isError}>
         {data && (
-          <div className="space-y-6">
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              <StatCard label="Sucursales" value={String(data.totalSedes)} icon={Building2} />
-              <StatCard label="Productos" value={String(data.totalProductos)} icon={Boxes} />
-              <StatCard label="Ventas totales" value={formatoSoles(data.totalVentas)} icon={ShoppingCart} />
+          <div className="space-y-8">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              <StatCard
+                label="Sucursales"
+                value={String(data.totalSedes)}
+                icon={Building2}
+                accent="primary"
+              />
+              <StatCard
+                label="Productos"
+                value={String(data.totalProductos)}
+                icon={Boxes}
+                accent="accent"
+              />
+              <StatCard
+                label="Ventas totales"
+                value={formatoSoles(data.totalVentas)}
+                icon={ShoppingCart}
+                accent="pink"
+              />
               <StatCard
                 label="Operaciones ejecutadas"
                 value={String(data.operacionesEjecutadas)}
                 icon={Calculator}
+                accent="violet"
               />
             </div>
 
-            {/* [Añadido] Tendencia de ventas y comparativo por sede: las 5 tarjetas de arriba
+            {/* [Añadido] Tendencia de ventas y comparativo por sede: las 4 tarjetas de arriba
                 solo dan un total plano; estos dos gráficos aprovechan el detalle semanal y
                 por sucursal que ya vive en la base de datos (D104-D105). */}
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-              <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+              <AccentCard accent="primary">
                 <div className="mb-3 text-sm font-semibold text-ink">Tendencia de ventas (16 semanas)</div>
                 <ResponsiveContainer width="100%" height={260}>
                   <LineChart data={data.tendenciaSemanal}>
@@ -59,9 +76,9 @@ export default function Dashboard() {
                     <Line type="monotone" dataKey="total" stroke="#2563eb" strokeWidth={2} dot={false} />
                   </LineChart>
                 </ResponsiveContainer>
-              </div>
+              </AccentCard>
 
-              <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+              <AccentCard accent="accent">
                 <div className="mb-3 text-sm font-semibold text-ink">Ventas por sucursal</div>
                 <ResponsiveContainer width="100%" height={260}>
                   <BarChart data={data.ventasPorSede}>
@@ -72,7 +89,7 @@ export default function Dashboard() {
                     <Bar dataKey="total" fill="#06b6d4" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
-              </div>
+              </AccentCard>
             </div>
           </div>
         )}

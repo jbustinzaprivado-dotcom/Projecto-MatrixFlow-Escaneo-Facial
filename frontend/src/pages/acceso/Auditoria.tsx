@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import AccentCard from '../../components/AccentCard'
 import DataTable from '../../components/DataTable'
 import PageHeader from '../../components/PageHeader'
 import QueryState from '../../components/QueryState'
@@ -53,7 +54,7 @@ export default function Auditoria() {
       <QueryState isLoading={resumen.isLoading} isError={resumen.isError}>
         {resumen.data && (
           <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
-            <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+            <AccentCard accent="violet">
               <div className="mb-3 text-sm font-semibold text-ink">
                 Actividad de los últimos 7 días ({resumen.data.total7Dias} eventos)
               </div>
@@ -70,9 +71,9 @@ export default function Auditoria() {
                   <Bar dataKey="cantidad" fill="#2563eb" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
-            </div>
+            </AccentCard>
 
-            <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+            <AccentCard accent="amber">
               <div className="mb-3 text-sm font-semibold text-ink">Usuarios más activos (7 días)</div>
               <ol className="space-y-2">
                 {resumen.data.masActivos.map((item, i) => (
@@ -87,7 +88,7 @@ export default function Auditoria() {
                   <li className="text-sm text-muted">Sin actividad en los últimos 7 días.</li>
                 )}
               </ol>
-            </div>
+            </AccentCard>
           </div>
         )}
       </QueryState>

@@ -67,7 +67,7 @@ function SidebarContent() {
           <NavLink
             to={to}
             className={({ isActive }) =>
-              `flex items-center gap-2 rounded-md px-2 py-2 text-sm transition-colors ${
+              `flex items-center gap-2 rounded-full px-3 py-2 text-sm transition-colors ${
                 indent ? 'ml-3' : ''
               } ${
                 isActive
@@ -93,7 +93,7 @@ function SidebarContent() {
               logout()
               navigate('/ingresar', { replace: true })
             }}
-            className="mt-2 flex w-full items-center gap-2 rounded-md px-2 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white"
+            className="mt-2 flex w-full items-center gap-2 rounded-full px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white"
           >
             <LogOut size={16} /> Cerrar sesión
           </button>
