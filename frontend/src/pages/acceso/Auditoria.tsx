@@ -2,10 +2,12 @@ import { useQuery } from '@tanstack/react-query'
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import AccentCard from '../../components/AccentCard'
 import DataTable from '../../components/DataTable'
+import MapaUbicaciones from '../../components/MapaUbicaciones'
 import PageHeader from '../../components/PageHeader'
 import QueryState from '../../components/QueryState'
 import Tabs from '../../components/Tabs'
-import { getAuditoria, getAuditoriaResumen } from '../../services/api'
+import { useAuth } from '../../context/AuthContext'
+import { getAuditoria, getAuditoriaResumen, getUbicacionesActivas } from '../../services/api'
 import type { AuditoriaEntry } from '../../types/domain'
 
 function TablaAuditoria({ rows }: { rows: AuditoriaEntry[] }) {
@@ -41,8 +43,18 @@ function TablaAuditoria({ rows }: { rows: AuditoriaEntry[] }) {
 // [Añadido D5, D9] Auditoría extendida: actividad de 7 días, usuarios más activos y ubicación
 // fija por sede. Con pestañas para no cargar todo el historial completo de una sola vez.
 export default function Auditoria() {
+  const { usuario } = useAuth()
+  const esAdministrador = usuario?.rol === 'administrador'
   const auditoria = useQuery({ queryKey: ['auditoria'], queryFn: getAuditoria })
   const resumen = useQuery({ queryKey: ['auditoria-resumen'], queryFn: getAuditoriaResumen })
+  // [Añadido, corrige D9] mapa en vivo (D128): `enabled` evita que un no-administrador
+  // dispare el GET, además del RequireAdmin que ya lo bloquea en el backend (D131).
+  const ubicaciones = useQuery({
+    queryKey: ['ubicaciones-activas'],
+    queryFn: getUbicacionesActivas,
+    enabled: esAdministrador,
+    refetchInterval: 60_000,
+  })
 
   return (
     <div>
@@ -92,6 +104,23 @@ export default function Auditoria() {
           </div>
         )}
       </QueryState>
+
+      {esAdministrador && (
+        <AccentCard accent="emerald" className="mb-6">
+          <div className="mb-3 text-sm font-semibold text-ink">
+            Usuarios activos ahora{ubicaciones.data ? ` (${ubicaciones.data.length})` : ''}
+          </div>
+          <QueryState isLoading={ubicaciones.isLoading} isError={ubicaciones.isError}>
+            {ubicaciones.data && ubicaciones.data.length > 0 ? (
+              <MapaUbicaciones ubicaciones={ubicaciones.data} />
+            ) : (
+              <div className="py-8 text-center text-sm text-muted">
+                Nadie tiene una sesión activa en este momento.
+              </div>
+            )}
+          </QueryState>
+        </AccentCard>
+      )}
 
       <QueryState
         isLoading={auditoria.isLoading}

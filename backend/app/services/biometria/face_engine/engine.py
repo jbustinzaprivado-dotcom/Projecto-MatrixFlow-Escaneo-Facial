@@ -12,7 +12,7 @@ import numpy as np
 
 from app.algorithms import vector_ops
 
-MODELS_DIR = Path(__file__).resolve().parents[3] / "models"
+MODELS_DIR = Path(__file__).resolve().parents[4] / "models"
 DETECTOR_PATH = MODELS_DIR / "face_detection_yunet_2023mar.onnx"
 RECOGNIZER_PATH = MODELS_DIR / "face_recognition_sface_2021dec.onnx"
 

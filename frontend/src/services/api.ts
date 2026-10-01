@@ -12,6 +12,7 @@ import type {
   Rol,
   Sede,
   TipoOperacion,
+  UbicacionActiva,
   Usuario,
   VectorRegistro,
   Venta,
@@ -384,4 +385,46 @@ export async function getAuditoriaResumen() {
     masActivos: data.mas_activos,
     total7Dias: data.total_7_dias,
   }
+}
+
+// ---------------------------------------------------------------------------
+// Ubicación en vivo [Añadido, corrige D9] — heartbeat cada 60s (Layout.tsx) + mapa en
+// Auditoría, solo administrador.
+// ---------------------------------------------------------------------------
+
+export async function reportarUbicacion(input: {
+  latitud: number
+  longitud: number
+  precisionM?: number
+}): Promise<void> {
+  await http.post('/ubicacion', {
+    latitud: input.latitud,
+    longitud: input.longitud,
+    precision_m: input.precisionM,
+  })
+}
+
+interface UbicacionActivaApi {
+  usuario_id: number
+  usuario: string
+  rol: Rol
+  sede: string
+  latitud: number
+  longitud: number
+  precision_m: number | null
+  actualizado_en: string
+}
+
+export async function getUbicacionesActivas(): Promise<UbicacionActiva[]> {
+  const { data } = await http.get<UbicacionActivaApi[]>('/ubicacion/activas')
+  return data.map((u) => ({
+    usuarioId: u.usuario_id,
+    usuario: u.usuario,
+    rol: u.rol,
+    sede: u.sede,
+    latitud: u.latitud,
+    longitud: u.longitud,
+    precisionM: u.precision_m,
+    actualizadoEn: u.actualizado_en,
+  }))
 }

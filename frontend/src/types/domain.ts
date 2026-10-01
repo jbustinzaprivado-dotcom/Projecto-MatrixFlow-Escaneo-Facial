@@ -120,3 +120,16 @@ export interface VerificacionResultado {
   similitud?: number
   token?: string
 }
+
+/** [Añadido, corrige D9] posición en vivo del dispositivo durante la sesión — una fila por
+ * usuario, no historial. Alimenta el mapa de Auditoría (solo administrador). */
+export interface UbicacionActiva {
+  usuarioId: number
+  usuario: string
+  rol: Rol
+  sede: string
+  latitud: number
+  longitud: number
+  precisionM: number | null
+  actualizadoEn: string
+}

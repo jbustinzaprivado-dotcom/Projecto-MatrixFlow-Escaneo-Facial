@@ -6,6 +6,7 @@ from app.models.empresa.category_model import Categoria
 from app.models.empresa.company_model import Empresa
 from app.models.biometria.face_model import RostroEmbedding
 from app.models.operacion.inventory_model import Inventario, MovimientoInventario
+from app.models.acceso.location_model import UbicacionUsuario
 from app.models.algebra.matrix_model import Matriz, MatrizValor
 from app.models.algebra.operation_model import Operacion, OperacionEntrada, OperacionResultado
 from app.models.empresa.product_model import Producto
@@ -24,6 +25,7 @@ __all__ = [
     "RostroEmbedding",
     "Inventario",
     "MovimientoInventario",
+    "UbicacionUsuario",
     "Matriz",
     "MatrizValor",
     "Operacion",

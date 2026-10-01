@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.requests import Request
 from fastapi.responses import JSONResponse
 
-from app.api.routes.acceso import audit, users
+from app.api.routes.acceso import audit, location, users
 from app.api.routes.algebra import matrices, operations, vectors
 from app.api.routes.biometria import verification
 from app.api.routes.empresa import branches, companies, products
@@ -46,6 +46,7 @@ app.include_router(reports.router, prefix=API_PREFIX)
 app.include_router(users.router, prefix=API_PREFIX)
 app.include_router(verification.router, prefix=API_PREFIX)
 app.include_router(audit.router, prefix=API_PREFIX)
+app.include_router(location.router, prefix=API_PREFIX)
 app.include_router(dashboard.router, prefix=API_PREFIX)
 app.include_router(targets.router, prefix=API_PREFIX)
 

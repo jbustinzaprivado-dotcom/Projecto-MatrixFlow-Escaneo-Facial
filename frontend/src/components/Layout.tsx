@@ -20,6 +20,7 @@ import {
 import { useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useUbicacionHeartbeat } from '../hooks/useUbicacionHeartbeat'
 
 const ROL_LABEL = { administrador: 'Administrador', analista: 'Analista', consulta: 'Consulta' }
 
@@ -104,6 +105,7 @@ function SidebarContent() {
 }
 
 export default function Layout() {
+  useUbicacionHeartbeat()
   const [open, setOpen] = useState(false)
 
   return (
