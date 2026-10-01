@@ -10,9 +10,10 @@ Uso: venv/bin/python -m app.scripts.registrar_rostro <DNI> <ruta_a_la_foto.jpg>
 import sys
 
 from app.database.connection import SessionLocal
-from app.repositories import face_repository, user_repository
-from app.services.face_engine import engine
-from app.services.face_engine.engine import RostroRechazado
+from app.repositories.biometria import face_repository
+from app.repositories.acceso import user_repository
+from app.services.biometria.face_engine import engine
+from app.services.biometria.face_engine.engine import RostroRechazado
 
 
 def main() -> None:

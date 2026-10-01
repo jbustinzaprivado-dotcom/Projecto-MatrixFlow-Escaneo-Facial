@@ -3,9 +3,9 @@
 import numpy as np
 import pytest
 
-from app.services import verification_service
-from app.services.face_engine import engine
-from app.services.face_engine.engine import RostroRechazado
+from app.services.biometria import verification_service
+from app.services.biometria.face_engine import engine
+from app.services.biometria.face_engine.engine import RostroRechazado
 
 FOTO_CORRECTA = b"foto-correcta"
 VECTOR_REGISTRADO = np.array([1.0, 0.0, 0.0], dtype=np.float32)

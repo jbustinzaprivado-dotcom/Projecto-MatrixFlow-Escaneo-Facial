@@ -3,22 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.requests import Request
 from fastapi.responses import JSONResponse
 
-from app.api.routes import (
-    audit,
-    branches,
-    companies,
-    dashboard,
-    inventory,
-    matrices,
-    operations,
-    products,
-    reports,
-    sales,
-    targets,
-    users,
-    vectors,
-    verification,
-)
+from app.api.routes.acceso import audit, users
+from app.api.routes.algebra import matrices, operations, vectors
+from app.api.routes.biometria import verification
+from app.api.routes.empresa import branches, companies, products
+from app.api.routes.operacion import inventory, sales, targets
+from app.api.routes.reportes import dashboard, reports
 from app.core.config import get_settings
 from app.core.errors import ApiException
 

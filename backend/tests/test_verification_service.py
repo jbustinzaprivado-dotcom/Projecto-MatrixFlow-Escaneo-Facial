@@ -9,10 +9,11 @@ import pytest
 
 from app.core.errors import ApiException
 from app.core.security import decodificar_token
-from app.repositories import audit_repository, verification_repository
-from app.services import verification_service
-from app.services.face_engine import engine
-from app.services.face_engine.engine import RostroRechazado
+from app.repositories.acceso import audit_repository
+from app.repositories.biometria import verification_repository
+from app.services.biometria import verification_service
+from app.services.biometria.face_engine import engine
+from app.services.biometria.face_engine.engine import RostroRechazado
 
 FOTO_CORRECTA = b"foto-correcta"
 FOTO_OTRA_PERSONA = b"foto-otra-persona"

@@ -30,8 +30,8 @@ from app.models import (
     Venta,
     VentaDetalle,
 )
-from app.schemas.operation_schema import OperacionCreate
-from app.services import operation_service
+from app.schemas.algebra.operation_schema import OperacionCreate
+from app.services.algebra import operation_service
 
 random.seed(42)
 

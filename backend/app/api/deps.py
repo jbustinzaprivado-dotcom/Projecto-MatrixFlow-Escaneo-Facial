@@ -7,7 +7,7 @@ from app.core.errors import ApiException
 from app.core.security import decodificar_token
 from app.database.connection import get_db
 from app.models import Usuario
-from app.repositories import user_repository
+from app.repositories.acceso import user_repository
 
 DbSession = Annotated[Session, Depends(get_db)]
 
