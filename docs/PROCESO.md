@@ -356,3 +356,45 @@ Los cinco módulos que se veían vacíos (Dashboard, Vectores, Matrices, Inventa
 ### Pendiente
 
 Ninguno de código. Queda por escribir, aparte de este documento de proceso, un informe de sustentación del desarrollo (fuera del código del repositorio), a partir de una plantilla que el equipo va a proporcionar.
+
+## 23. Seguimiento de ubicación en vivo [Añadido, corrige D9]
+
+**Estado: cerrado.** El equipo pidió un sistema de ubicación en tiempo real, actualizado cada 60s y registrado en la web. D9 (Fase 1) ya había decidido lo contrario para la "ubicación de auditoría": fija por sede, sin GPS del navegador, justo para evitar pedir permisos y depender de un servicio externo. Consultado de nuevo, el equipo confirmó que esta vez sí quería la posición real del dispositivo durante la sesión, con Leaflet + OpenStreetMap (gratis, sin API key), mostrada dentro del módulo Auditoría ya existente — no una pestaña nueva. Siguiendo la regla de que ninguna decisión se borra (D11), esto se documenta como corrección de D9, no como reemplazo: la columna "Ubicación (sede)" de Auditoría, que sigue siendo `usuario.sucursal_id`, no cambió.
+
+| # | Tema | Decisión |
+|---|---|---|
+| D128 | Alcance, corrige D9 | Se trackea la posición real del dispositivo durante la sesión activa, con Leaflet + OpenStreetMap, dentro del módulo Auditoría existente. D9 no se borra: sigue describiendo la columna "Ubicación (sede)" ya existente, que no cambia. |
+| D129 | Tabla `ubicaciones_usuario` [Añadido] | Una fila por usuario (upsert), no historial — a diferencia de `audit_logs`/`verificacion_intentos` (registros permanentes), esto es solo "dónde está ahora". `ondelete="CASCADE"` (no `SET NULL`): si se borra el usuario, no tiene sentido guardar su última posición. |
+| D130 | Ventana de "activo" = 150s | El heartbeat late cada 60s (`useUbicacionHeartbeat`, `Layout.tsx`). 2.5× tolera exactamente un latido perdido (atraso de red, pestaña en segundo plano) sin que alguien realmente activo parpadee como desconectado, y sin dejar "fantasmas" visibles minutos después de cerrar el navegador. |
+| D131 | Endpoints | `POST /ubicacion` (cualquier rol autenticado, 204, upsert — identidad del JWT, nunca de un id que mande el cliente). `GET /ubicacion/activas` (solo administrador) — mismo criterio RBAC que `GET /verificacion` (D71). |
+| D132 | Heartbeat en el frontend | Hook propio (`useUbicacionHeartbeat`), montado una sola vez en `Layout.tsx` (que ya solo vive dentro de `<RutaProtegida>` — no hace falta tocar `AuthContext`). Falla en silencio si no hay permiso o no hay soporte de geolocalización: la app debe seguir siendo 100% usable sin esto. |
+| D133 | Panel del mapa | Tercer `AccentCard` (`accent="emerald"`, el único libre) en `Auditoria.tsx`, ancho completo, `refetchInterval: 60000`, gateado por `esAdministrador` igual que `Usuarios.tsx` (tanto el render como el `enabled` del `useQuery`, para que un no-administrador ni dispare el `GET`). |
+| D134 | Gotcha Leaflet + Vite | El ícono por defecto de Leaflet arma rutas de imagen que Vite no resuelve (bug conocido de la comunidad, no de este proyecto). Se corrigió una vez, en `MapaUbicaciones.tsx`, importando los 3 PNG de `leaflet/dist/images/` a mano y reasignando `L.Icon.Default`. |
+
+### Cierre
+
+Backend: `ubicaciones_usuario` (modelo, migración, repositorio, esquema, servicio, rutas) en el dominio `acceso`. Frontend: `leaflet`/`react-leaflet`/`@types/leaflet` instalados, `useUbicacionHeartbeat` reporta la posición cada 60s mientras hay sesión activa, `MapaUbicaciones` la dibuja, `Auditoria.tsx` la muestra en vivo solo a administradores. `npm run build` (`tsc -b` + `vite build`) queda limpio.
+
+### Pendiente
+
+Ninguno. El equipo aplicó la migración y verificó manualmente contra el servidor real: `alembic upgrade head` creó la tabla sin errores, el login biométrico funciona (tras corregir un bug no relacionado, D137), y el mapa muestra el marcador en vivo dentro del panel de Auditoría. De paso se detectó y corrigió un bug real, no planeado, encontrado durante esta misma verificación manual: ver D137.
+
+## 24. Correcciones de una auditoría de código [Añadido]
+
+**Estado: cerrado.** Antes de escribir el informe final de sustentación, el equipo pidió una revisión profunda de todo el proyecto buscando errores graves. Se encontraron 4 problemas reales (verificados contra el código, no solo sospechas); se corrigieron los 2 graves de inmediato, los 2 menores quedan documentados como limitación conocida.
+
+| # | Tema | Decisión |
+|---|---|---|
+| D137 | Bug no relacionado, encontrado al verificar D128: `MODELS_DIR` del motor facial apuntaba mal | `backend/app/services/biometria/face_engine/engine.py` calculaba la carpeta de los pesos ONNX contando niveles de carpeta padre (`parents[3]`). Cuando el motor se movió de `services/face_engine/` a `services/biometria/face_engine/` (reorganización de carpetas, sección 22), ese conteo quedó desactualizado: apuntaba a `backend/app/models/` (el paquete de modelos SQLAlchemy) en vez de `backend/models/` (donde van los `.onnx`, D45). Corregido a `parents[4]`. Sin relación con la funcionalidad de ubicación — solo salió a la luz porque se hizo login real para probarla. |
+| D138 | Grave — limitador de `/verificacion` roto detrás del proxy de Render | El límite de "10 intentos por minuto" se guarda por IP (`request.client.host`), pero el `Dockerfile` levantaba `uvicorn` sin `--proxy-headers`: detrás del balanceador de Render, toda petición le llega a la app con la IP interna del proxy, no la del usuario real — el límite por IP se volvía, en la práctica, un único cupo compartido por todos los usuarios del sistema a la vez. Corregido agregando `--proxy-headers --forwarded-allow-ips='*'` al `CMD` del Dockerfile (el contenedor, en Render, solo es alcanzable por el proxy de Render — confiar en el header que agrega es seguro). Es el único endpoint sin sesión de todo el backend, así que era el punto donde más importaba. |
+| D139 | Grave — una venta no descontaba el inventario | `sale_service.create_venta` y `inventory_service.registrar_movimiento` eran dos caminos totalmente independientes: se podía vender cualquier cantidad de un producto con existencias en 0, y el Dashboard/Reportes mostraban cifras de ventas sin relación real con el stock. Corregido: `create_venta` ahora reutiliza las mismas funciones de `inventory_repository` que ya usa `registrar_movimiento` (`get_or_create`, `add_movimiento`, `ajustar_existencias`), con el mismo criterio de "no existencias negativas" (422 si no alcanza el stock). El cambio es hacia adelante: no recalcula el inventario de las ventas ya sembradas por `seed.py`, que escribe directo a las tablas sin pasar por este servicio. |
+| D140 | Menor, documentado sin corregir | **Condición de carrera en el control de stock negativo** (`inventory_service.registrar_movimiento`): la validación lee `existencias` y luego escribe sin bloqueo de fila — dos salidas simultáneas sobre el mismo producto/sucursal podrían, en teoría, dejarlo en negativo. Poco probable con un solo operador a la vez (uso real del sistema), se documenta como limitación conocida en vez de agregar bloqueo pesimista sin que nadie lo haya pedido. |
+| D141 | Menor, documentado sin corregir | **Metas y movimientos de inventario no validan que la sucursal/producto existan** antes de insertar, a diferencia de Ventas (que sí lo hace y devuelve un 404 limpio) — con un id inexistente, el error llega como un 500 crudo de PostgreSQL en vez de un mensaje claro. Se documenta como limitación conocida; la corrección (replicar las 2 validaciones que ya tiene `sale_service.create_venta`) es sencilla si se decide abordarla más adelante. |
+
+### Cierre
+
+2 bugs reales corregidos (uno no relacionado con la auditoría, hallado al verificar D128; dos de la auditoría de código propiamente dicha), 2 limitaciones menores documentadas y aceptadas. `python -c "import app.main"` limpio tras los cambios. Ningún test existente ejercita `POST /sales` ni depende del comportamiento anterior, y el frontend todavía no tiene una pantalla para crear ventas (`Ventas.tsx` es de solo lectura) — el cambio no tiene ningún punto de uso real que pueda haberse roto.
+
+### Pendiente
+
+Verificación manual del equipo contra el servidor real: confirmar con `curl` que `POST /sales` ahora descuenta `inventory.existencias` y que un `cantidad` mayor al stock disponible responde 422; para D138, no hay forma de probarlo sin desplegar a Render (el límite por IP ya funcionaba correctamente en desarrollo local, sin proxy de por medio).

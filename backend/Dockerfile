@@ -33,4 +33,10 @@ RUN mkdir -p models && \
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+# [Añadido, corrige hallazgo del análisis de código] `--proxy-headers --forwarded-allow-ips='*'`:
+# en Render (y en este mismo docker-compose), el único que puede conectarse directo al
+# contenedor es el balanceador/proxy — así que confiar en el `X-Forwarded-For` que agrega es
+# seguro. Sin esto, `request.client.host` (usado por el limitador de /verificacion, el único
+# endpoint sin sesión del backend) ve siempre la IP interna del proxy, no la del usuario real:
+# el límite "10 intentos por minuto por IP" se vuelve un solo cupo compartido por todos.
+CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --proxy-headers --forwarded-allow-ips='*'"]
