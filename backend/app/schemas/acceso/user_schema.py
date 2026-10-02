@@ -75,6 +75,11 @@ class VerificacionOut(BaseModel):
     similitud: float
     usuario: VerificacionUsuario | None = None
     token: str | None = None
+    # [Añadido, feedback del instructor] A nivel raíz, no dentro de VerificacionUsuario —
+    # ese `creado_en` es la fecha de creación de la cuenta, un concepto distinto que no debe
+    # mezclarse. Este es el momento real de ESTE ingreso, calculado en el servidor (nunca con
+    # el reloj del navegador, mismo criterio que audit_logs/verificacion_intentos/D130).
+    verificado_en: datetime | None = None
 
 
 class CarnetOut(BaseModel):

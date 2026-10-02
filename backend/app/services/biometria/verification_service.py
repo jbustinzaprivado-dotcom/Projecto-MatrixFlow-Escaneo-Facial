@@ -17,6 +17,7 @@ from sqlalchemy.orm import Session
 
 from app.core.errors import ApiException
 from app.core.security import crear_token
+from app.database.types import utcnow
 from app.models import Usuario
 from app.repositories.acceso import audit_repository, user_repository
 from app.repositories.biometria import face_repository, verification_repository
@@ -136,6 +137,7 @@ def verificar(db: Session, dni: str, imagen_bytes: bytes) -> VerificacionOut:
             creado_en=usuario.creado_en,
         ),
         token=crear_token(usuario.id, usuario.rol.nombre),
+        verificado_en=utcnow(),
     )
 
 

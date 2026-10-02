@@ -121,6 +121,7 @@ interface VerificacionApi {
     creado_en: string
   } | null
   token?: string | null
+  verificado_en?: string | null
 }
 
 /** [Añadido D6] Verificación 1:1 real contra el motor facial (SFace). Envía el DNI y la
@@ -144,6 +145,7 @@ export async function verificarPorDni(dni: string, imagen: Blob): Promise<Verifi
         }
       : undefined,
     token: data.token ?? undefined,
+    verificadoEn: data.verificado_en ?? undefined,
   }
 }
 

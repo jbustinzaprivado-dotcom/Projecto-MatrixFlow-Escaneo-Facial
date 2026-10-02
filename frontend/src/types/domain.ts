@@ -119,6 +119,9 @@ export interface VerificacionResultado {
   usuario?: Pick<Usuario, 'nombre' | 'dni' | 'rol' | 'activo'> & { sede: string; creadoEn: string }
   similitud?: number
   token?: string
+  /** [Añadido, feedback del instructor] Momento real de ESTE ingreso, calculado en el
+   * servidor — distinto de `usuario.creadoEn` (fecha de creación de la cuenta). */
+  verificadoEn?: string
 }
 
 /** [Añadido, corrige D9] posición en vivo del dispositivo durante la sesión — una fila por
